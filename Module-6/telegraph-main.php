@@ -10,18 +10,20 @@ $textStorage = []; // основной массив задания
  * @param string $title Принимаемый параметр заголовка, присвоится ключу 'title'
  * @param string $text Принимаемый параметр текста, присвоится ключу 'text'
  */
-function add(array &$globalArr, string $title = 'default title', string $text = 'default text') : void
+function add(array &$globalArr, string $title = '', string $text = '') : void
 {
-    $globalArr[] = ['title' => trim($title), 'text' => trim($text)];
+    $addTitle = (trim($title) === '') ? 'default title' : trim($title);
+    $addText = (trim($text) === '') ? 'default text' : trim($text);
+    $globalArr[] = ['title' => $addTitle, 'text' => $addText];
 }
 
 /**
  * Функция производит удаление из глобального массива конкретного элемента по переданному индексу
  * @param array $globalArr принимаемый по адресу глобальный массив
- * @param null $key  передаваемый индекс
+ * @param ?int $key  передаваемый индекс
  * @return bool Возвращает false если индекс не задан, или в массиве нет значения по индексу, в ином случае - true
  */
-function remove(array &$globalArr, $key = null) : bool
+function remove(array &$globalArr, ?int $key = null) : bool
 {
     if (isset($key, $globalArr[$key]) === false) {
         return false;
@@ -33,12 +35,12 @@ function remove(array &$globalArr, $key = null) : bool
 /**
  * Функция редактирует title||text ассоциативного массива по заданному индексу в передаваемом глобальном массиве
  * @param array $globalArr принимаемый по адресу глобальный массив
- * @param null $key передаваемый индекс
+ * @param ?int $key передаваемый индекс
  * @param string $newTitle Новый заголовок
  * @param string $newText Новый текст
  * @return bool Возвращает false если индекс не задан, или в массиве нет значения по индексу, в ином случае - true
  */
-function edit(array &$globalArr, $key = null, string $newTitle = '', string $newText = '') : bool
+function edit(array &$globalArr, ?int $key = null, string $newTitle = '', string $newText = '') : bool
 {
     if (isset($key, $globalArr[$key]) === false) {
         return false;
