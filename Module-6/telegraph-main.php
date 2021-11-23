@@ -6,15 +6,15 @@ $textStorage = []; // основной массив задания
 /**
  * Функция производит заполнение глобального массива globalArr[] переданными параметрами
  * в виде ассоциативного массива ['title' => 'title', 'text' => 'text']
- * @param array $globalArr принимаемый по адресу глобальный массив
  * @param string $title Принимаемый параметр заголовка, присвоится ключу 'title'
  * @param string $text Принимаемый параметр текста, присвоится ключу 'text'
  */
-function add(array &$globalArr, string $title = '', string $text = '') : void
+function add(string $title = '', string $text = '') : void
 {
+    global $textStorage;
     $addTitle = (trim($title) === '') ? 'default title' : trim($title);
     $addText = (trim($text) === '') ? 'default text' : trim($text);
-    $globalArr[] = ['title' => $addTitle, 'text' => $addText];
+    $textStorage[] = ['title' => $addTitle, 'text' => $addText];
 }
 
 /**
@@ -59,8 +59,8 @@ function edit(array &$globalArr, ?int $key = null, string $newTitle = '', string
 /* Testing code */
 
 // Задание 3
-add($textStorage, 'main', 'hello');
-add($textStorage, 'my name', "i will not tell you my name");
+add('main', 'hello');
+add('my name', "i will not tell you my name");
 print_r($textStorage);
 
 // Задание 5
