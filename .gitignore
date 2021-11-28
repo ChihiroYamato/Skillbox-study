@@ -1,2 +1,3 @@
 /.idea/
-/Module-8/publishing/
+/Module-8/publishing/*
+!/Module-8/publishing/.gitkeep
