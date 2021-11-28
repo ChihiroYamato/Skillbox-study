@@ -36,7 +36,7 @@ class TelegraphText
 
     public function loadText(string $slug) : string|false
     {
-        if (!($loadTextArray = file_get_contents(self::DIRECTORY .$slug))) {
+        if (!($loadTextArray = file_get_contents(self::DIRECTORY . $slug))) {
             return false;
         }
         $loadTextArray = unserialize($loadTextArray);
@@ -60,13 +60,13 @@ class TelegraphText
     }
 }
 
-$firstText = new TelegraphText('John');
-print_r($firstText);
-echo PHP_EOL;
+$firstPublication = new TelegraphText('John');
+$firstPublication->editText('Hello word', 'Greeting');
+$fSlug = $firstPublication->storeText();
 
-$fSlug = $firstText->storeText();
 
-$secondText = new TelegraphText();
-$secondText->loadText($fSlug);
-print_r($secondText);
+
+$secondPublication = new TelegraphText();
+$text = $secondPublication->loadText($fSlug);
+echo $text;
 
