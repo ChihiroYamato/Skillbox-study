@@ -2,15 +2,20 @@
 
 class TelegraphText
 {
-    private string $title = '';
-    private string $text = '';
-    private string $author = '';
-    private string $published = '';
-    private string $slug = '';
+    private string $title = '';                                         // Заголовок
+    private string $text = '';                                          // Текст
+    private string $author = '';                                        // Автор
+    private string $published = '';                                     // Дата публикации
+    private string $slug = '';                                          // Уникальное имя объекта
 
-    private const DIRECTORY =  __DIR__ . '\publishing\\';
+    private const DIRECTORY =  __DIR__ . '\publishing\\';               // Стандартная директория для записи
 
 
+    /**
+     * Инициализирует поля $author $published $slug при создании объекта
+     * @param string $author принимаемый параметр.
+     * если не задан, инициализация всех перечисленных полей не производится.
+     */
     public function __construct(string $author = '__default__')
     {
         if ($author !== '__default__') {
@@ -20,6 +25,10 @@ class TelegraphText
         }
     }
 
+    /**
+     * Записывает данные публикации в отдельный файл с названием $slug
+     * @return string|false Возвращает поле $slug при успешном выполнении, false при ошибке
+     */
     public function storeText() : string|false
     {
         $storeTextArray = [
@@ -34,6 +43,11 @@ class TelegraphText
         return $this->slug;
     }
 
+    /**
+     * Записывает в объект данные публикации из файла с названием $slug
+     * @param string $slug принимаемый параметр названия файла, из которого произодится запись
+     * @return string|false при успешном выполнении метода возвращает поле $text, иначе ыозвращает false
+     */
     public function loadText(string $slug) : string|false
     {
         if (!($loadTextArray = file_get_contents(self::DIRECTORY . $slug))) {
@@ -53,6 +67,13 @@ class TelegraphText
         return $this->text;
     }
 
+    /**
+     * Метод позволяет записать (перезаписать) поля $text $title
+     * @param string|null $text принимаемое значение для записи текста.
+     * если не передан, или передан null - запись (перезапись) не производится
+     * @param string|null $title принимаемое значение для записи заголовка.
+     * если не передан, или передан null - запись (перезапись) не производится
+     */
     public function editText (?string $text = null, ?string $title = null)
     {
         $this->text = trim($text) ?? $this->text;
@@ -60,12 +81,13 @@ class TelegraphText
     }
 }
 
+// Пункты 7-8
 $firstPublication = new TelegraphText('John');
 $firstPublication->editText('Hello word', 'Greeting');
 $fSlug = $firstPublication->storeText();
 
 
-
+//Пункт 9
 $secondPublication = new TelegraphText();
 $text = $secondPublication->loadText($fSlug);
 echo $text;
