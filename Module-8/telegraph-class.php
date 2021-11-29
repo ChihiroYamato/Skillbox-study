@@ -1,5 +1,7 @@
 <?php
 
+require_once('..\Module-9\implement-classes.php');
+
 class TelegraphText
 {
     private string $title = '';                                         // Заголовок
@@ -8,11 +10,10 @@ class TelegraphText
     private string $published = '';                                     // Дата публикации
     private string $slug = '';                                          // Уникальное имя объекта
 
-    private const DIRECTORY =  __DIR__ . '\publishing\\';               // Стандартная директория для записи
+    public static object $storage;                                      // объект класса FileStorage
 
 
-    /**
-     * Инициализирует поля $author $published $slug при создании объекта
+    /** Инициализирует поля $author $published $slug при создании объекта
      * @param string $author принимаемый параметр.
      * если не задан, инициализация всех перечисленных полей не производится.
      */
@@ -23,40 +24,29 @@ class TelegraphText
             $this->published = date('H:i:s j-M-y (l)');
             $this->slug = mb_strtolower(substr($author, 0, 3) . '-' . date('j-M-y'));
         }
+        if (!isset(self::$storage)) {
+            self::$storage = new FileStorage();
+        }
     }
 
-    /**
-     * Записывает данные публикации в отдельный файл с названием $slug
-     * @return string|false Возвращает поле $slug при успешном выполнении, false при ошибке
+    /** Записывает данные публикации в отдельный файл с модифицированным названием $slug
+     * @return string|false Возвращает модифицированное поле $slug при успешном выполнении, false при ошибке
      */
     public function storeText() : string|false
     {
-        $storeTextArray = [
-            'title' => $this->title,
-            'text' => $this->text,
-            'author' => $this->author,
-            'published' => $this->published,
-        ];
-        if (false === file_put_contents(self::DIRECTORY . $this->slug, serialize($storeTextArray))) {
-            return false;
-        }
-        return $this->slug;
+        return self::$storage->create($this);
     }
 
-    /**
-     * Записывает в объект данные публикации из файла с названием $slug
+    /** Записывает в объект данные публикации из файла с названием $slug
      * @param string $slug принимаемый параметр названия файла, из которого произодится запись
      * @return string|false при успешном выполнении метода возвращает поле $text, иначе ыозвращает false
      */
     public function loadText(string $slug) : string|false
     {
-        if (!($loadTextArray = file_get_contents(self::DIRECTORY . $slug))) {
+        if (false === ($newObject = self::$storage->read($slug))) {
             return false;
         }
-        $loadTextArray = unserialize($loadTextArray);
-        if (!isset($loadTextArray['title'], $loadTextArray['text'], $loadTextArray['author'], $loadTextArray['published'])) {
-            return false;
-        }
+        $loadTextArray = $newObject->getAllField();
 
         $this->title = $loadTextArray['title'];
         $this->text = $loadTextArray['text'];
@@ -67,8 +57,7 @@ class TelegraphText
         return $this->text;
     }
 
-    /**
-     * Метод позволяет записать (перезаписать) поля $text $title
+    /** Метод позволяет записать (перезаписать) поля $text $title
      * @param string|null $text принимаемое значение для записи текста.
      * если не передан, или передан null - запись (перезапись) не производится
      * @param string|null $title принимаемое значение для записи заголовка.
@@ -80,13 +69,28 @@ class TelegraphText
         $this->title = trim($title) ?? $this->title;
     }
 
+    /** Метод перезаписывает поле $slug
+     * @param string $newSlug принимаемый параметр, перезаписывается в $this->slug
+     */
     public function changeSlug(string $newSlug)
     {
         $this->slug = $newSlug;
     }
 
+    /** Метод возвращает поле $slug */
     public function getSlug() : string
     {
         return $this->slug;
+    }
+
+    /** Метод возвращает поля класса в виде массива */
+    public function getAllField() : array
+    {
+        return [
+            'title' => $this->title,
+            'text' => $this->text,
+            'author' => $this->author,
+            'published' => $this->published,
+        ];
     }
 }

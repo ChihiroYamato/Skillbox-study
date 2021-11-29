@@ -8,6 +8,7 @@ class FileStorage extends Storage
     private string $directory = '';
     private array $fileStorage = [];
 
+
     public function __construct(string $dir = 'storage')
     {
         $this->directory = __DIR__ . '\\' . basename($dir) . '\\';
@@ -85,6 +86,7 @@ class FileStorage extends Storage
 }
 
 
+/* //тестирование работоспособности кода пункты 4-9
 
 $storage = new FileStorage();
 $johnBlack = new TelegraphText('John');
@@ -107,4 +109,27 @@ echo "\n\n";
 $storage->delete($path);
 $storageArray = $storage->list();
 print_r($storageArray);
+*/
 
+/* Тестирование модификации класса TelegraphText, пункт 10
+
+$a = new TelegraphText('Alex');
+$b = new TelegraphText('Dima');
+$c = new TelegraphText('Naruto');
+
+$a->editText('Good', 'morning');
+$b->editText('hello', 'world');
+
+$pathofA = TelegraphText::$storage->create($a);
+$pathofB = $b->storeText();
+$a::$storage->create($c);
+
+$c->loadText($pathofA);
+$a = TelegraphText::$storage->read($pathofB);
+
+var_dump($a, $c);
+
+
+$storageArray = TelegraphText::$storage->list();
+print_r($storageArray);
+*/
