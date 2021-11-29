@@ -2,11 +2,11 @@
 
 abstract class Storage
 {
-    abstract public function create(object $object) : string;
-    abstract public function read(string $slug) : object ;
-    abstract public function update(string $slug, object $object, object $newObject);
-    abstract public function delete(string $slug);
-    abstract public function list() : array;
+    abstract public function create(object $object) : string|false;
+    abstract public function read(string $slug) : object|false;
+    abstract public function update(string $slug, object $object, object $newObject) : bool;
+    abstract public function delete(string $slug) : bool;
+    abstract public function list() : array|false;
 }
 
 abstract class View

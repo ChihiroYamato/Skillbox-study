@@ -79,16 +79,14 @@ class TelegraphText
         $this->text = trim($text) ?? $this->text;
         $this->title = trim($title) ?? $this->title;
     }
+
+    public function changeSlug(string $newSlug)
+    {
+        $this->slug = $newSlug;
+    }
+
+    public function getSlug() : string
+    {
+        return $this->slug;
+    }
 }
-
-// Пункты 7-8
-$firstPublication = new TelegraphText('John');
-$firstPublication->editText('Hello word', 'Greeting');
-$fSlug = $firstPublication->storeText();
-
-
-//Пункт 9
-$secondPublication = new TelegraphText();
-$text = $secondPublication->loadText($fSlug);
-echo $text;
-
