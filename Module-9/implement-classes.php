@@ -5,10 +5,12 @@ require_once('..\Module-8\telegraph-class.php');
 
 class FileStorage extends Storage
 {
-    private string $directory = '';
-    private array $fileStorage = [];
+    private string $directory = '';                     // директория хранилища
+    private array $fileStorage = [];                    // Массив всех объектов класса TelegraphText в хранилище
 
-
+    /** Инициализирует хранилище, создает директорию по заданному пути, если директории не существует
+     * @param string $dir задает путь к директории хранилища
+     */
     public function __construct(string $dir = 'storage')
     {
         $this->directory = __DIR__ . '\\' . basename($dir) . '\\';
@@ -17,6 +19,10 @@ class FileStorage extends Storage
         }
     }
 
+    /** Загружает новый объект класса TelegraphText в хранилище в виде файла
+     * @param object $object передаваемый объект
+     * @return string|false Возвращает путь к файлу, при ошибке возвращает false
+     */
     public function create(object $object): string|false
     {
         if ($object instanceof TelegraphText && !str_contains($object->getSlug(), '-id=')) {
@@ -36,6 +42,10 @@ class FileStorage extends Storage
         return false;
     }
 
+    /** Считывает объект класса TelegraphText из хранилища
+     * @param string $slug путь к объекту
+     * @return object|false возвращает объект, либо false в случае ошибки
+     */
     public function read(string $slug): object|false
     {
         $slug = $this->directory . basename($slug);
@@ -48,6 +58,12 @@ class FileStorage extends Storage
         return false;
     }
 
+    /** Пересохраняет объект класса TelegraphText по указанному пути
+     * @param string $slug путь в перезаписываемому объекту
+     * @param object $object исходный объект для проверки
+     * @param object $newObject новый объект, который будет записан
+     * @return bool возвращает true в случае успешной перезаписи, иначе false
+     */
     public function update(string $slug, object $object, object $newObject): bool
     {
         $slug = $this->directory . basename($slug);
@@ -60,11 +76,18 @@ class FileStorage extends Storage
         return false;
     }
 
+    /** Удаляет объект класса TelegraphText из хранилища по указанному пути
+     * @param string $slug путь к удаляемому объекту
+     * @return bool возвращает true в случае успешного удаления, иначе false
+     */
     public function delete(string $slug): bool
     {
         return unlink($this->directory . basename($slug)); 
     }
 
+    /** Выводит все объекты класса TelegraphText из хранилища в виде массива
+     * @return array|false возвращает массив, в случае ошибки false
+     */
     public function list(): array|false
     {
         $this->fileStorage = [];
