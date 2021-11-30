@@ -1,7 +1,7 @@
 <?php
 
 require_once('abstract-classes.php');
-require_once('..\Module-8\telegraph-class.php');
+require_once('telegraph-class.php');
 
 class FileStorage extends Storage
 {
@@ -109,8 +109,8 @@ class FileStorage extends Storage
 }
 
 
-/* //тестирование работоспособности кода пункты 4-9
-
+//тестирование работоспособности кода пункты 4-9 (раскоментировать для выполнения)
+/*
 $storage = new FileStorage();
 $johnBlack = new TelegraphText('John');
 $johnBlack->editText('Hello world', 'Greating');
@@ -134,8 +134,8 @@ $storageArray = $storage->list();
 print_r($storageArray);
 */
 
-/* Тестирование модификации класса TelegraphText, пункт 10
-
+//Тестирование модификации класса TelegraphText, пункт 10 (раскоментировать для выполнения)
+/*
 $a = new TelegraphText('Alex');
 $b = new TelegraphText('Dima');
 $c = new TelegraphText('Naruto');
