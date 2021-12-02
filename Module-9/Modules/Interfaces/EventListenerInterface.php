@@ -1,10 +1,6 @@
 <?php
 
-interface LoggerInterface
-{
-    public function logMessage(string $error);
-    public function lastMessages(int $countErrors);
-}
+namespace Modules\Interfaces;
 
 interface EventListenerInterface
 {

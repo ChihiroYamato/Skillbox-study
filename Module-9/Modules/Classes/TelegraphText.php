@@ -1,6 +1,6 @@
 <?php
 
-require_once('implement-classes.php');
+namespace Modules\Classes;
 
 class TelegraphText
 {
@@ -13,7 +13,8 @@ class TelegraphText
     public static object $storage;                                      // объект класса FileStorage
 
 
-    /** Инициализирует поля $author $published $slug при создании объекта
+    /**
+     * Инициализирует поля $author $published $slug при создании объекта
      * @param string $author принимаемый параметр.
      * если не задан, инициализация всех перечисленных полей не производится.
      */
@@ -29,7 +30,8 @@ class TelegraphText
         }
     }
 
-    /** Записывает данные публикации в отдельный файл с модифицированным названием $slug
+    /**
+     * Записывает данные публикации в отдельный файл с модифицированным названием $slug
      * @return string|false Возвращает модифицированное поле $slug при успешном выполнении, false при ошибке
      */
     public function storeText() : string|false
@@ -37,7 +39,8 @@ class TelegraphText
         return self::$storage->create($this);
     }
 
-    /** Записывает в объект данные публикации из файла с названием $slug
+    /**
+     * Записывает в объект данные публикации из файла с названием $slug
      * @param string $slug принимаемый параметр названия файла, из которого произодится запись
      * @return string|false при успешном выполнении метода возвращает поле $text, иначе ыозвращает false
      */
@@ -57,7 +60,8 @@ class TelegraphText
         return $this->text;
     }
 
-    /** Метод позволяет записать (перезаписать) поля $text $title
+    /**
+     * Метод позволяет записать (перезаписать) поля $text $title
      * @param string|null $text принимаемое значение для записи текста.
      * если не передан, или передан null - запись (перезапись) не производится
      * @param string|null $title принимаемое значение для записи заголовка.
@@ -69,7 +73,8 @@ class TelegraphText
         $this->title = trim($title) ?? $this->title;
     }
 
-    /** Метод перезаписывает поле $slug
+    /**
+     * Метод перезаписывает поле $slug
      * @param string $newSlug принимаемый параметр, перезаписывается в $this->slug
      */
     public function changeSlug(string $newSlug)
@@ -77,13 +82,17 @@ class TelegraphText
         $this->slug = $newSlug;
     }
 
-    /** Метод возвращает поле $slug */
+    /**
+     * Метод возвращает поле $slug
+     */
     public function getSlug() : string
     {
         return $this->slug;
     }
 
-    /** Метод возвращает поля класса в виде массива */
+    /**
+     * Метод возвращает поля класса в виде массива
+     */
     public function getAllField() : array
     {
         return [

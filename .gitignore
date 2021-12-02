@@ -3,5 +3,7 @@
 !/Module-8/publishing/.gitkeep
 *.code-workspace
 
-/Module-9/storage/
+/Module-9/Storage/
 /Module-9/reserved/
+
+*/Logs/
