@@ -1,5 +1,4 @@
 <?php
-
 namespace Modules\Classes;
 
 class TelegraphText
@@ -10,7 +9,7 @@ class TelegraphText
     private string $published = '';                                     // Дата публикации
     private string $slug = '';                                          // Уникальное имя объекта
 
-    public static object $storage;                                      // объект класса FileStorage
+    public static FileStorage $storage;                                 // объект класса FileStorage
 
 
     /**

@@ -1,7 +1,8 @@
 <?php
-
 namespace Modules\Classes;
-use Modules\Abstracts\Storage, Modules\Traits\TraitDirectory;
+
+use Modules\Abstracts\Storage,
+    Modules\Traits\TraitDirectory;
 
 class FileStorage extends Storage
 {
@@ -10,7 +11,7 @@ class FileStorage extends Storage
     private string $directory = '';                                 // директория хранилища
     private array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
 
-    private const LOGS_PATH = __DIR__ . '\Logs\file-storage-log';   // Путь к файлу логов
+    private static string $logsPath = '';                           // Путь к файлу логов
 
     /**
      * Инициализирует хранилище, создает директорию по заданному пути, если директории не существует
@@ -18,9 +19,10 @@ class FileStorage extends Storage
      */
     public function __construct(string $dir = 'Storage')
     {
-        $this->directory = __DIR__ . '\\' . basename($dir) . '\\';
+        $this->directory = dirname(__DIR__, 2) . '\\' . basename($dir) . '\\';
+        self::$logsPath = dirname(__DIR__, 2) . '\Logs\file-storage-log';
         $this->makeDirectory($this->directory);
-        $this->makeDirectory(dirname(self::LOGS_PATH));
+        $this->makeDirectory(dirname(self::$logsPath));
     }
 
     /**
@@ -28,9 +30,9 @@ class FileStorage extends Storage
      * @param object $object передаваемый объект
      * @return string|false Возвращает путь к файлу, при ошибке возвращает false
      */
-    public function create(object $object): string|false
+    public function create(TelegraphText $object): string|false
     {
-        if ($object instanceof TelegraphText && !str_contains($object->getSlug(), '-id=')) {
+        if (!str_contains($object->getSlug(), '-id=')) {
             $count = 0;
             $nameFile = $this->directory . $object->getSlug() . "-id=$count";
             while (file_exists($nameFile)) {
@@ -67,11 +69,11 @@ class FileStorage extends Storage
     /**
      * Пересохраняет объект класса TelegraphText по указанному пути
      * @param string $slug путь в перезаписываемому объекту
-     * @param object $object исходный объект для проверки
-     * @param object $newObject новый объект, который будет записан
+     * @param object $object исходный объект класса TelegraphText для проверки
+     * @param object $newObject новый объект класса TelegraphText, который будет записан
      * @return bool возвращает true в случае успешной перезаписи, иначе false
      */
-    public function update(string $slug, object $object, object $newObject): bool
+    public function update(string $slug, TelegraphText $object, TelegraphText $newObject): bool
     {
         $slug = $this->directory . basename($slug);
         if ($this->read($slug) == $object) {
@@ -119,7 +121,7 @@ class FileStorage extends Storage
 
     public function logMessage(string $error) : bool
     {
-        if (false === file_put_contents(self::LOGS_PATH, serialize($error), FILE_APPEND)) {
+        if (false === file_put_contents(self::$logsPath, serialize($error), FILE_APPEND)) {
             return false;
         }
         return true;
@@ -127,7 +129,7 @@ class FileStorage extends Storage
 
     public function lastMessages(int $countErrors): array|false
     {
-        if (false === ($massages = file_get_contents(self::LOGS_PATH))) {
+        if (false === ($massages = file_get_contents(self::$logsPath))) {
             return false;
         }
         $massages = array_slice(array_filter(explode(';', $massages)), -$countErrors);

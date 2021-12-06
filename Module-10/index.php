@@ -1,16 +1,27 @@
 <?php
 
+use Modules\Classes\FileStorage,
+    Modules\Classes\TelegraphText;
 
-$a = new TelegraphText('Alex');
-/*TelegraphText::$storage->logMessage('Error_404');
-TelegraphText::$storage->logMessage('Error_505');
-TelegraphText::$storage->logMessage('Error_500');
-TelegraphText::$storage->logMessage('Error_405');
-TelegraphText::$storage->logMessage('Error_400');
-TelegraphText::$storage->logMessage('Error_555');*/
-$b = TelegraphText::$storage->lastMessages(3);
-var_dump($b);
+require_once __DIR__ . '/Autoload/autoloader.php';
 
+echo 'world';
+
+
+
+// $text = new TelegraphText('John');
+// $banl = new FileStorage();
+// print_r($text)
+
+// $a = new TelegraphText('Alex');
+// TelegraphText::$storage->logMessage('Error_404');
+// TelegraphText::$storage->logMessage('Error_505');
+// TelegraphText::$storage->logMessage('Error_500');
+// TelegraphText::$storage->logMessage('Error_405');
+// TelegraphText::$storage->logMessage('Error_400');
+// TelegraphText::$storage->logMessage('Error_555');
+// $b = TelegraphText::$storage->lastMessages(3);
+// var_dump($b);
 
 
 //тестирование работоспособности кода пункты 4-9 (раскоментировать для выполнения)
