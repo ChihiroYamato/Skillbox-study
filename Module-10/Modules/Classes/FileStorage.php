@@ -10,8 +10,8 @@ class FileStorage extends Storage
 
     private string $directory = '';                                 // директория хранилища
     private array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
-    private array $eventFlags = [];                                 //
-    private ?\Closure $eventCallback = null;                        //
+    private array $eventFlags = [];                                 // Массив с флагами прослушки методов
+    private ?\Closure $eventCallback = null;                        // callback функция при прослушивании
 
     private static string $logsPath = '';                           // Путь к файлу логов
 
@@ -21,17 +21,26 @@ class FileStorage extends Storage
      */
     public function __construct(string $dir = 'storage')
     {
+        // Инициализация директорий для хранения текстов и логов
         $this->directory = dirname(__DIR__, 2) . '\\' . basename($dir) . '\\';
         self::$logsPath = dirname(__DIR__, 2) . '\logs\file-storage-log';
         $this->makeDirectory($this->directory);
         $this->makeDirectory(dirname(self::$logsPath));
 
+        // Инициализация флагов
         $methodList = get_class_methods($this);
         foreach ($methodList as $method) {
             $this->eventFlags[$method] = false;
         }
     }
 
+    /**
+     * Все методы реализованы защищенными для перенаправления их в магический метод __call для проверки
+     * флага attachEvent и выполнения переданной callback функции в случае установки флага
+     * @param string $name название существующего метода класса FileStorage
+     * @param array $arguments массив дейтвительных параметров для метода
+     * @return mixed возвращает значение выполненного метода
+    */
     public function __call(string $name, array $arguments) : mixed
     {
         if (method_exists($this, $name)) {
@@ -140,6 +149,11 @@ class FileStorage extends Storage
 
     // Методы интерфейсов
 
+    /**
+     * Записывает error в в файл логов
+     * @param string $error Строка ошибки
+     * @return bool Возвращает true в случае успешной записи ошибки в файл, иначе false
+    */
     public function logMessage(string $error) : bool
     {
         if (false === file_put_contents(self::$logsPath, serialize($error), FILE_APPEND)) {
@@ -148,6 +162,11 @@ class FileStorage extends Storage
         return true;
     }
 
+    /**
+     * Возвращает countErrors ошибок из файла логов
+     * @param int $countErrors число записей, которые необходимо вернуть
+     * @return array|false возвращает массив записей в случае успешного извлечения, иначе false
+    */
     public function lastMessages(int $countErrors = 0): array|false
     {
         if (false === ($massages = file_get_contents(self::$logsPath))) {
@@ -160,6 +179,13 @@ class FileStorage extends Storage
         return $massages;
     }
 
+    /**
+     * Присваивает указанному методу флаг прослушки, при последующих вызовах указанного метода
+     * будет выполнена callback функция
+     * @param ?string $method Существующий метод класса FileStorage
+     * @param ?callable $callbackFun callback функция, которую необходимо выполнять при вызове метода
+     * @return bool возвращает true в случае успешной установки флага, иначе false
+    */
     public function attachEvent(?string $method = null, ?callable $callbackFun = null) : bool
     {
         if (isset($this->eventFlags[$method]) && is_callable($callbackFun)) {
@@ -170,6 +196,11 @@ class FileStorage extends Storage
         return false;
     }
 
+    /**
+     * Деактивирует флаг прослушки для метода, установленный в методе attachEvent
+     * @param ?string $method Существующий метод класса FileStorage, который необходимо прекратить прослушивать
+     * @return bool возвращает trueв с случае успешной деактивации, иначе false
+    */
     public function detouchEvent(?string $method = null) : bool
     {
         if (isset($this->eventFlags[$method])) {
