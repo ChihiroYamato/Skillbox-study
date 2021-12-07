@@ -19,10 +19,10 @@ class FileStorage extends Storage
      * Инициализирует хранилище, создает директорию по заданному пути, если директории не существует
      * @param string $dir задает путь к директории хранилища
      */
-    public function __construct(string $dir = 'Storage')
+    public function __construct(string $dir = 'storage')
     {
         $this->directory = dirname(__DIR__, 2) . '\\' . basename($dir) . '\\';
-        self::$logsPath = dirname(__DIR__, 2) . '\Logs\file-storage-log';
+        self::$logsPath = dirname(__DIR__, 2) . '\logs\file-storage-log';
         $this->makeDirectory($this->directory);
         $this->makeDirectory(dirname(self::$logsPath));
 
@@ -46,17 +46,12 @@ class FileStorage extends Storage
         }
     }
 
-    protected function getValue(string $name, int $age) : void
-    {
-        echo 'Привет, ' . $name . '! Через год тебе будет: ' . ++$age . PHP_EOL;
-    }
-
     /**
      * Загружает новый объект класса TelegraphText в хранилище в виде файла
      * @param object $object передаваемый объект
      * @return string|false Возвращает путь к файлу, при ошибке возвращает false
      */
-    public function create(object $object): string|false
+    protected function create(object $object): string|false
     {
         if ($object instanceof TelegraphText && !str_contains($object->getSlug(), '-id=')) {
             $count = 0;
@@ -80,7 +75,7 @@ class FileStorage extends Storage
      * @param string $slug путь к объекту
      * @return object|false возвращает объект, либо false в случае ошибки
      */
-    public function read(string $slug): object|false
+    protected function read(string $slug): object|false
     {
         $slug = $this->directory . basename($slug);
         if (file_exists($slug)) {
@@ -99,7 +94,7 @@ class FileStorage extends Storage
      * @param object $newObject новый объект класса TelegraphText, который будет записан
      * @return bool возвращает true в случае успешной перезаписи, иначе false
      */
-    public function update(string $slug, object $object, object $newObject): bool
+    protected function update(string $slug, object $object, object $newObject): bool
     {
         $slug = $this->directory . basename($slug);
         if ($this->read($slug) == $object) {
@@ -116,7 +111,7 @@ class FileStorage extends Storage
      * @param string $slug путь к удаляемому объекту
      * @return bool возвращает true в случае успешного удаления, иначе false
      */
-    public function delete(string $slug): bool
+    protected function delete(string $slug): bool
     {
         return unlink($this->directory . basename($slug));
     }
@@ -125,7 +120,7 @@ class FileStorage extends Storage
      * Выводит все объекты класса TelegraphText из хранилища в виде массива
      * @return array|false возвращает массив, в случае ошибки false
      */
-    public function list(): array|false
+    protected function list(): array|false
     {
         $this->fileStorage = [];
         if (!is_dir($this->directory)) {
@@ -184,17 +179,3 @@ class FileStorage extends Storage
         return false;
     }
 }
-
-
-/**
- * Первый варик - запихать в каждый метод кусок кода, который будет тригерить ебучий attachEvent, но надо
- * подумать над реализацией коллбек функции в каждом методе
- *
- * второй варик - реализовать вызов всех методов через __call() сделав их protected
- *
- * Третий варик - подумать над исключениями
- *
- * четвертый варик - все еще читаю про возможности доп модулей по регистрации ивентов
- *
- * пятый варик - ошибки, что с ошибками делать, читаю про ошибки
- */

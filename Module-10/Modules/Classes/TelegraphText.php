@@ -25,7 +25,7 @@ class TelegraphText
             $this->slug = mb_strtolower(substr($author, 0, 3) . '-' . date('j-M-y'));
         }
         if (!isset(self::$storage)) {
-            self::$storage = new FileStorage();
+            self::$storage = new FileStorage('text_storage');
         }
     }
 
