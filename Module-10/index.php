@@ -5,7 +5,19 @@ use Modules\Classes\FileStorage,
 
 require_once __DIR__ . '/Autoload/autoloader.php';
 
-echo 'world';
+$callBack = function() {
+    echo 'Идет прослушивание метода!' . PHP_EOL;
+};
+
+$test = new TelegraphText('john');
+TelegraphText::$storage->attachEvent('getValue' , $callBack);
+TelegraphText::$storage->getValue('Alex', 19);
+TelegraphText::$storage->detouchEvent('getValue');
+TelegraphText::$storage->getValue('Dima', 24);
+
+
+
+
 
 
 
@@ -22,52 +34,3 @@ echo 'world';
 // TelegraphText::$storage->logMessage('Error_555');
 // $b = TelegraphText::$storage->lastMessages(3);
 // var_dump($b);
-
-
-//тестирование работоспособности кода пункты 4-9 (раскоментировать для выполнения)
-/*
-$storage = new FileStorage();
-$johnBlack = new TelegraphText('John');
-$johnBlack->editText('Hello world', 'Greating');
-
-$johnWhite = new TelegraphText('John');
-
-$storage->create($johnBlack);
-$path = $storage->create($johnWhite);
-
-$newJohn = $storage->read($path);
-$newJohn->editText('My Name is Giovanni Giorgio, but everybody calls me Giorgio.', 'My name?');
-$storage->update($path, $storage->read($path), $newJohn);
-
-
-$storageArray = $storage->list();
-print_r($storageArray);
-echo "\n\n";
-
-$storage->delete($path);
-$storageArray = $storage->list();
-print_r($storageArray);
-*/
-
-//Тестирование модификации класса TelegraphText, пункт 10 (раскоментировать для выполнения)
-/*
-$a = new TelegraphText('Alex');
-$b = new TelegraphText('Dima');
-$c = new TelegraphText('Naruto');
-
-$a->editText('Good', 'morning');
-$b->editText('hello', 'world');
-
-$pathofA = TelegraphText::$storage->create($a);
-$pathofB = $b->storeText();
-$a::$storage->create($c);
-
-$c->loadText($pathofA);
-$a = TelegraphText::$storage->read($pathofB);
-
-var_dump($a, $c);
-
-
-$storageArray = TelegraphText::$storage->list();
-print_r($storageArray);
-*/

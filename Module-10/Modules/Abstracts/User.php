@@ -5,9 +5,9 @@ use Modules\Interfaces\EventListenerInterface;
 
 abstract class User implements EventListenerInterface
 {
-    public int $id;
-    public string $name;
-    public string $role;
+    protected int $id;
+    protected string $name;
+    protected string $role;
 
     abstract public function getTextsToEdit();
 }

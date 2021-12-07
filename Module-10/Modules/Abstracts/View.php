@@ -4,7 +4,7 @@ namespace Modules\Abstracts;
 
 abstract class View
 {
-    public object $storage;
+    public Storage $storage;
 
     public function __construct(object $object)
     {

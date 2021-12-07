@@ -10,6 +10,8 @@ class FileStorage extends Storage
 
     private string $directory = '';                                 // директория хранилища
     private array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
+    private array $eventFlags = [];                                 //
+    private ?\Closure $eventCallback = null;                        //
 
     private static string $logsPath = '';                           // Путь к файлу логов
 
@@ -23,6 +25,30 @@ class FileStorage extends Storage
         self::$logsPath = dirname(__DIR__, 2) . '\Logs\file-storage-log';
         $this->makeDirectory($this->directory);
         $this->makeDirectory(dirname(self::$logsPath));
+
+        $methodList = get_class_methods($this);
+        foreach ($methodList as $method) {
+            $this->eventFlags[$method] = false;
+        }
+    }
+
+    public function __call(string $name, array $arguments) : mixed
+    {
+        if (method_exists($this, $name)) {
+            if ($this->eventFlags[$name]) {
+                ($this->eventCallback)();
+            }
+            foreach ($arguments as $param => $value) {
+                $paramToString[] = '$arguments[' . $param . ']';
+            }
+            $paramToString = implode(', ', $paramToString);
+            return eval('return $this->' . $name . '(' . $paramToString . ');');
+        }
+    }
+
+    protected function getValue(string $name, int $age) : void
+    {
+        echo 'Привет, ' . $name . '! Через год тебе будет: ' . ++$age . PHP_EOL;
     }
 
     /**
@@ -30,9 +56,9 @@ class FileStorage extends Storage
      * @param object $object передаваемый объект
      * @return string|false Возвращает путь к файлу, при ошибке возвращает false
      */
-    public function create(TelegraphText $object): string|false
+    public function create(object $object): string|false
     {
-        if (!str_contains($object->getSlug(), '-id=')) {
+        if ($object instanceof TelegraphText && !str_contains($object->getSlug(), '-id=')) {
             $count = 0;
             $nameFile = $this->directory . $object->getSlug() . "-id=$count";
             while (file_exists($nameFile)) {
@@ -73,7 +99,7 @@ class FileStorage extends Storage
      * @param object $newObject новый объект класса TelegraphText, который будет записан
      * @return bool возвращает true в случае успешной перезаписи, иначе false
      */
-    public function update(string $slug, TelegraphText $object, TelegraphText $newObject): bool
+    public function update(string $slug, object $object, object $newObject): bool
     {
         $slug = $this->directory . basename($slug);
         if ($this->read($slug) == $object) {
@@ -127,7 +153,7 @@ class FileStorage extends Storage
         return true;
     }
 
-    public function lastMessages(int $countErrors): array|false
+    public function lastMessages(int $countErrors = 0): array|false
     {
         if (false === ($massages = file_get_contents(self::$logsPath))) {
             return false;
@@ -139,13 +165,36 @@ class FileStorage extends Storage
         return $massages;
     }
 
-    public function attachEvent(callable $method, callable $callbackFun)
+    public function attachEvent(?string $method = null, ?callable $callbackFun = null) : bool
     {
-        echo 'go go';
+        if (isset($this->eventFlags[$method]) && is_callable($callbackFun)) {
+            $this->eventFlags[$method] = true;
+            $this->eventCallback = $callbackFun;
+            return true;
+        }
+        return false;
     }
 
-    public function detouchEvent(callable $method)
+    public function detouchEvent(?string $method = null) : bool
     {
-        echo 'no go';
+        if (isset($this->eventFlags[$method])) {
+            $this->eventFlags[$method] = false;
+            return true;
+        }
+        return false;
     }
 }
+
+
+/**
+ * Первый варик - запихать в каждый метод кусок кода, который будет тригерить ебучий attachEvent, но надо
+ * подумать над реализацией коллбек функции в каждом методе
+ *
+ * второй варик - реализовать вызов всех методов через __call() сделав их protected
+ *
+ * Третий варик - подумать над исключениями
+ *
+ * четвертый варик - все еще читаю про возможности доп модулей по регистрации ивентов
+ *
+ * пятый варик - ошибки, что с ошибками делать, читаю про ошибки
+ */
