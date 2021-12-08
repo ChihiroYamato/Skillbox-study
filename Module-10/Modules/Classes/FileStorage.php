@@ -4,16 +4,16 @@ namespace Modules\Classes;
 use Modules\Abstracts\Storage,
     Modules\Traits\TraitDirectory;
 
-class FileStorage extends Storage
+final class FileStorage extends Storage
 {
     use TraitDirectory;
 
-    private string $directory = '';                                 // директория хранилища
-    private array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
-    private array $eventFlags = [];                                 // Массив с флагами прослушки методов
-    private ?\Closure $eventCallback = null;                        // callback функция при прослушивании
+    protected string $directory = '';                                 // директория хранилища
+    protected array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
+    protected array $eventFlags = [];                                 // Массив с флагами прослушки методов
+    protected ?\Closure $eventCallback = null;                        // callback функция при прослушивании
 
-    private static string $logsPath = '';                           // Путь к файлу логов
+    protected static string $logsPath = '';                           // Путь к файлу логов
 
     /**
      * Инициализирует хранилище, создает директорию по заданному пути, если директории не существует

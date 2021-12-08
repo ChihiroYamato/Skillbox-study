@@ -1,13 +1,13 @@
 <?php
 namespace Modules\Classes;
 
-class TelegraphText
+final class TelegraphText
 {
-    private string $title = '';                                         // Заголовок
-    private string $text = '';                                          // Текст
-    private string $author = '';                                        // Автор
-    private string $published = '';                                     // Дата публикации
-    private string $slug = '';                                          // Уникальное имя объекта
+    protected string $title = '';                                         // Заголовок
+    protected string $text = '';                                          // Текст
+    protected string $author = '';                                        // Автор
+    protected string $published = '';                                     // Дата публикации
+    protected string $slug = '';                                          // Уникальное имя объекта
 
     public static FileStorage $storage;                                 // объект класса FileStorage
 

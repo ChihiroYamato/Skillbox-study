@@ -4,7 +4,7 @@ namespace Modules\Traits;
 
 trait TraitDirectory
 {
-    private function makeDirectory(string $directory)
+    protected function makeDirectory(string $directory)
     {
         if (!is_dir($directory)) {
             mkdir($directory);
