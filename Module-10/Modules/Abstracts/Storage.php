@@ -6,9 +6,10 @@ use Modules\Interfaces\LoggerInterface,
 
 abstract class Storage implements LoggerInterface, EventListenerInterface
 {
-    abstract protected function create(object $object) : string|false;
-    abstract protected function read(string $slug) : object|false;
-    abstract protected function update(string $slug, object $object, object $newObject) : bool;
-    abstract protected function delete(string $slug) : bool;
-    abstract protected function list() : array|false;
+    abstract public function __construct(string $dir);
+    abstract public function create(object $object) : string|false;
+    abstract public function read(string $slug) : object|false;
+    abstract public function update(string $slug, object $object, object $newObject) : bool;
+    abstract public function delete(string $slug) : bool;
+    abstract public function list() : array|false;
 }

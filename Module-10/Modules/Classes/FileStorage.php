@@ -35,33 +35,15 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Все методы реализованы защищенными для перенаправления их в магический метод __call для проверки
-     * флага attachEvent и выполнения переданной callback функции в случае установки флага
-     * @param string $name название существующего метода класса FileStorage
-     * @param array $arguments массив дейтвительных параметров для метода
-     * @return mixed возвращает значение выполненного метода
-    */
-    public function __call(string $name, array $arguments) : mixed
-    {
-        if (method_exists($this, $name)) {
-            if ($this->eventFlags[$name]) {
-                ($this->eventCallback)();
-            }
-            foreach ($arguments as $param => $value) {
-                $paramToString[] = '$arguments[' . $param . ']';
-            }
-            $paramToString = implode(', ', $paramToString);
-            return eval('return $this->' . $name . '(' . $paramToString . ');');
-        }
-    }
-
-    /**
      * Загружает новый объект класса TelegraphText в хранилище в виде файла
      * @param object $object передаваемый объект
      * @return string|false Возвращает путь к файлу, при ошибке возвращает false
      */
-    protected function create(object $object): string|false
+    public function create(object $object): string|false
     {
+        if ($this->eventFlags[__FUNCTION__]) {
+            ($this->eventCallback)();
+        }
         if ($object instanceof TelegraphText && !str_contains($object->getSlug(), '-id=')) {
             $count = 0;
             $nameFile = $this->directory . $object->getSlug() . "-id=$count";
@@ -84,8 +66,11 @@ final class FileStorage extends Storage
      * @param string $slug путь к объекту
      * @return object|false возвращает объект, либо false в случае ошибки
      */
-    protected function read(string $slug): object|false
+    public function read(string $slug): object|false
     {
+        if ($this->eventFlags[__FUNCTION__]) {
+            ($this->eventCallback)();
+        }
         $slug = $this->directory . basename($slug);
         if (file_exists($slug)) {
             $getObject = unserialize(file_get_contents($slug));
@@ -103,8 +88,11 @@ final class FileStorage extends Storage
      * @param object $newObject новый объект класса TelegraphText, который будет записан
      * @return bool возвращает true в случае успешной перезаписи, иначе false
      */
-    protected function update(string $slug, object $object, object $newObject): bool
+    public function update(string $slug, object $object, object $newObject): bool
     {
+        if ($this->eventFlags[__FUNCTION__]) {
+            ($this->eventCallback)();
+        }
         $slug = $this->directory . basename($slug);
         if ($this->read($slug) == $object) {
             if (false === file_put_contents($slug, serialize($newObject))) {
@@ -120,8 +108,11 @@ final class FileStorage extends Storage
      * @param string $slug путь к удаляемому объекту
      * @return bool возвращает true в случае успешного удаления, иначе false
      */
-    protected function delete(string $slug): bool
+    public function delete(string $slug): bool
     {
+        if ($this->eventFlags[__FUNCTION__]) {
+            ($this->eventCallback)();
+        }
         return unlink($this->directory . basename($slug));
     }
 
@@ -129,8 +120,11 @@ final class FileStorage extends Storage
      * Выводит все объекты класса TelegraphText из хранилища в виде массива
      * @return array|false возвращает массив, в случае ошибки false
      */
-    protected function list(): array|false
+    public function list(): array|false
     {
+        if ($this->eventFlags[__FUNCTION__]) {
+            ($this->eventCallback)();
+        }
         $this->fileStorage = [];
         if (!is_dir($this->directory)) {
             return false;
@@ -153,7 +147,7 @@ final class FileStorage extends Storage
      * Записывает error в в файл логов
      * @param string $error Строка ошибки
      * @return bool Возвращает true в случае успешной записи ошибки в файл, иначе false
-    */
+     */
     public function logMessage(string $error) : bool
     {
         if (false === file_put_contents(self::$logsPath, serialize($error), FILE_APPEND)) {
@@ -166,7 +160,7 @@ final class FileStorage extends Storage
      * Возвращает countErrors ошибок из файла логов
      * @param int $countErrors число записей, которые необходимо вернуть
      * @return array|false возвращает массив записей в случае успешного извлечения, иначе false
-    */
+     */
     public function lastMessages(int $countErrors = 0): array|false
     {
         if (false === ($massages = file_get_contents(self::$logsPath))) {
@@ -185,7 +179,7 @@ final class FileStorage extends Storage
      * @param ?string $method Существующий метод класса FileStorage
      * @param ?callable $callbackFun callback функция, которую необходимо выполнять при вызове метода
      * @return bool возвращает true в случае успешной установки флага, иначе false
-    */
+     */
     public function attachEvent(?string $method = null, ?callable $callbackFun = null) : bool
     {
         if (isset($this->eventFlags[$method]) && is_callable($callbackFun)) {
@@ -200,7 +194,7 @@ final class FileStorage extends Storage
      * Деактивирует флаг прослушки для метода, установленный в методе attachEvent
      * @param ?string $method Существующий метод класса FileStorage, который необходимо прекратить прослушивать
      * @return bool возвращает trueв с случае успешной деактивации, иначе false
-    */
+     */
     public function detouchEvent(?string $method = null) : bool
     {
         if (isset($this->eventFlags[$method])) {

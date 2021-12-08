@@ -6,6 +6,7 @@ use Modules\Classes\TelegraphText,
 /** подключение файла автозагрузки классов*/
 require_once __DIR__ . '/Autoload/autoloader.php';
 
+
 /** Реализация callback функции*/
 $callBack = function() {
     echo 'Идет прослушивание метода!' . PHP_EOL;
@@ -18,6 +19,7 @@ $text->editText('Hello World!', 'Greating');
 
 /** Проверка прослушки ивента*/
 $textStorage->attachEvent('create' , $callBack);
+var_dump($textStorage->eventFlags);
 $pathText = $textStorage->create($text);
 echo $pathText . PHP_EOL;
 $textStorage->detouchEvent('create');
