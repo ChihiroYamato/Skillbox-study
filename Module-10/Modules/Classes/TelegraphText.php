@@ -9,7 +9,7 @@ final class TelegraphText
     protected string $published = '';                                     // Дата публикации
     protected string $slug = '';                                          // Уникальное имя объекта
 
-    public static FileStorage $storage;                                 // объект класса FileStorage
+    protected static FileStorage $storage;                                 // объект класса FileStorage
 
 
     /**
