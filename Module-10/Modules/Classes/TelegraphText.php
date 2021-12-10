@@ -3,11 +3,11 @@ namespace Modules\Classes;
 
 final class TelegraphText
 {
-    protected string $title = '';                                         // Заголовок
-    protected string $text = '';                                          // Текст
-    protected string $author = '';                                        // Автор
-    protected string $published = '';                                     // Дата публикации
-    protected string $slug = '';                                          // Уникальное имя объекта
+    private string $title = '';                                         // Заголовок
+    private string $text = '';                                          // Текст
+    private string $author = '';                                        // Автор
+    private string $published = '';                                     // Дата публикации
+    private string $slug = '';                                          // Уникальное имя объекта
 
     protected static FileStorage $storage;                                 // объект класса FileStorage
 
@@ -29,11 +29,33 @@ final class TelegraphText
         }
     }
 
+    public function __set(string $name, mixed $value)
+    {
+        match ($name) {
+            'author'    => $this->author = mb_substr($value, 0, 120),
+            'slug'      => $this->slug = preg_replace('~[^a-z1-9.\-_]~i', '', $value),
+            'published' => $this->published = ((int) $value > time()) ? date('H:i:s j-M-y (l)', (int) $value) : date('H:i:s j-M-y (l)'),
+            'text'      => $this->storeText(),
+            default     => null,
+        };
+    }
+
+    public function __get(string $name) : mixed
+    {
+        return match ($name) {
+            'author'    => $this->author,
+            'slug'      => $this->slug,
+            'published' => $this->published,
+            'text'      => $this->loadText($this->slug),
+            default     => null,
+        };
+    }
+
     /**
      * Записывает данные публикации в отдельный файл с модифицированным названием $slug
      * @return string|false Возвращает модифицированное поле $slug при успешном выполнении, false при ошибке
      */
-    public function storeText() : string|false
+    private function storeText() : string|false
     {
         return self::$storage->create($this);
     }
@@ -43,7 +65,7 @@ final class TelegraphText
      * @param string $slug принимаемый параметр названия файла, из которого произодится запись
      * @return string|false при успешном выполнении метода возвращает поле $text, иначе ыозвращает false
      */
-    public function loadText(string $slug) : string|false
+    private function loadText(string $slug) : string|false
     {
         if (false === ($newObject = self::$storage->read($slug))) {
             return false;

@@ -9,5 +9,5 @@ abstract class User implements EventListenerInterface
     protected string $name;
     protected string $role;
 
-    abstract public function getTextsToEdit();
+    abstract protected function getTextsToEdit();
 }
