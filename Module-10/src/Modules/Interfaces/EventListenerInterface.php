@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Interfaces;
+namespace Base\Modules\Interfaces;
 
 interface EventListenerInterface
 {

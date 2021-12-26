@@ -1,8 +1,8 @@
 <?php
-namespace Modules\Abstracts;
+namespace Base\Modules\Abstracts;
 
-use Modules\Interfaces\LoggerInterface,
-    Modules\Interfaces\EventListenerInterface;
+use Base\Modules\Interfaces\LoggerInterface,
+    Base\Modules\Interfaces\EventListenerInterface;
 
 abstract class Storage implements LoggerInterface, EventListenerInterface
 {

@@ -1,8 +1,8 @@
 <?php
-namespace Modules\Classes;
+namespace Base\Modules\Classes;
 
-use Modules\Abstracts\Storage,
-    Modules\Traits\TraitDirectory;
+use Base\Modules\Abstracts\Storage,
+    Base\Modules\Traits\TraitDirectory;
 
 final class FileStorage extends Storage
 {
@@ -22,8 +22,8 @@ final class FileStorage extends Storage
     public function __construct(string $dir = 'storage')
     {
         // Инициализация директорий для хранения текстов и логов
-        $this->directory = dirname(__DIR__, 2) . '\\' . basename($dir) . '\\';
-        self::$logsPath = dirname(__DIR__, 2) . '\logs\file-storage-log';
+        $this->directory = dirname(__DIR__, 3) . '/' . basename($dir) . '/';
+        self::$logsPath = dirname(__DIR__, 3) . '/logs/file-storage-log';
         $this->makeDirectory($this->directory);
         $this->makeDirectory(dirname(self::$logsPath));
 

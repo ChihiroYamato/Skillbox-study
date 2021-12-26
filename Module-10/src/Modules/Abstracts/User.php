@@ -1,7 +1,7 @@
 <?php
 
-namespace Modules\Abstracts;
-use Modules\Interfaces\EventListenerInterface;
+namespace Base\Modules\Abstracts;
+use Base\Modules\Interfaces\EventListenerInterface;
 
 abstract class User implements EventListenerInterface
 {

@@ -1,5 +1,5 @@
 <?php
-namespace Modules\Classes;
+namespace Base\Modules\Classes;
 
 final class TelegraphText
 {

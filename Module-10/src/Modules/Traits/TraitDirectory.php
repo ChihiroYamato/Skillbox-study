@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Traits;
+namespace Base\Modules\Traits;
 
 trait TraitDirectory
 {

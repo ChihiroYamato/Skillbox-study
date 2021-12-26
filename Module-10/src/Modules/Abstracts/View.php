@@ -1,6 +1,6 @@
 <?php
 
-namespace Modules\Abstracts;
+namespace Base\Modules\Abstracts;
 
 abstract class View
 {
