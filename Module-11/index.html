@@ -15,111 +15,111 @@
 
 <body>
 
-    <header class="header">
-        <div class="header-main-block">
+    <header class="flex-block header">
+        <div class="content-between-position">
             <ul class="header-menu list">
-                <li class="header-list-item list-item"><a href="#" class="link">Услуги</a></li>
-                <li class="header-list-item list-item"><a href="#" class="link">Портфолио</a></li>
-                <li class="header-list-item list-item"><a href="#" class="link">Стоимость</a></li>
+                <li><a href="#" class="link hover-blue">Услуги</a></li>
+                <li><a href="#" class="link hover-blue">Портфолио</a></li>
+                <li><a href="#" class="link hover-blue">Стоимость</a></li>
             </ul>
             <div class="header-feedback">
-                <span class="header-phone">+7 (999) 555-35-35</span>
-                <button class="header-button" call-order>Заказать звонок</button>
+                <a href="tel:+79995553535" class="link phone">+7 (999) 555-35-35</a>
+                <button class="button-tranperent button" call-order>Заказать звонок</button>
             </div>
         </div>
     </header>
 
     <main class="main">
-        <section>
-            <div>
-                <div>
-                    <h1>Александр Миронов</h1>
+        <section class="flex-block">
+            <div class="preview-block">
+                <div class="preview-description">
+                    <h1 class="preview-name">Александр Миронов</h1>
                     <p>Backend-разработчик и немного верстальщик</p>
-                    <button learn-more>Узнать больше</button>
-                </div>
-                <div>
-                    <img src="#" alt="this is pic">
+                    <button class="button-blue button" learn-more>Узнать больше</button>
                 </div>
             </div>
         </section>
 
-        <section>
-            <h2>Что я делаю</h2>
-            <div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Верстка лендинг страниц и сайтов любой сложности</p>
+        <section class="flex-block">
+            <div class="section-block">
+                <h2 class="section-header">Что я делаю</h2>
+                <div class="description-block" sorting-elements>
+                    <div class="skills-description-item">
+                        <img class="description-picture" src="./assets/images/coding.png" alt="this is pic">
+                        <p class="description-text">Кодинг бекенда страниц и сайтов любой сложности</p>
+                    </div>
+                    <div class="skills-description-item">
+                        <img class="description-picture" src="./assets/images/laptop.png" alt="this is pic">
+                        <p class="description-text">Адаптивный анализ и построение графиков в ексельке</p>
+                    </div>
+                    <div class="skills-description-item">
+                        <img class="description-picture" src="./assets/images/rocket-launch.png" alt="this is pic">
+                        <p class="description-text">Запуск на прод ракеты с багами и фичами</p>
+                    </div>
+                    <div class="skills-description-item">
+                        <img class="description-picture" src="./assets/images/settings.png" alt="this is pic">
+                        <p class="description-text">Исправление и доработка - такие термины в работе не используются</p>
+                    </div>
                 </div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Адаптивна верстка под все браузеры и устройства</p>
-                </div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Frontend-разработка и программирование</p>
-                </div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Исправление и доработка существующей верстки</p>
-                </div>
-            </div>
-            <div>
-                <button>Узнать стоимость</button>
-            </div>
-        </section>
-
-        <section>
-            <h2>Примеры работ</h2>
-            <div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Сайт психолога Веры Антоновой</p>
-                </div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Сайт магазина детсткой одежды</p>
-                </div>
-                <div>
-                    <img src="#" alt="this is pic">
-                    <p>Сайт магазина "Рыболов"</p>
+                <div class="section-footer">
+                    <button class="button-tranperent button" get-sort>Узнать стоимость</button>
                 </div>
             </div>
         </section>
 
-        <section>
-            <div>
-                <div>
-                    <p>Адаптивная вёрстка под все устройства и браузеры от 1000 р всего за 4 часа.*</p>
+        <section class="flex-block">
+            <div class="section-block">
+                <h2 class="section-header">Примеры работ</h2>
+                <div class="description-block">
+                    <div class="portfolio-description-item">
+                        <img class="portfolio-picture" src="./assets/images/item1.jpg" alt="this is pic">
+                        <p class="description-text">Сайт кеберкотлеты Веры Антоновой</p>
+                    </div>
+                    <div class="portfolio-description-item">
+                        <img class="portfolio-picture" src="./assets/images/item2.jpg" alt="this is pic">
+                        <p class="description-text">Сайт молодого и успешного блогера</p>
+                    </div>
+                    <div class="portfolio-description-item">
+                        <img class="portfolio-picture" src="./assets/images/item3.jpg" alt="this is pic">
+                        <p class="description-text">Сайт магазина аниме фигурок</p>
+                    </div>
                 </div>
-                <div>
-                    <p>Срок и стоимость могут отличаться от заявленных и рассчитываются индивидуально, в зависимости от сложности задач</p>
+                <div class="section-footer">
+                    <button class="button-tranperent button" call-order>Заказать проект</button>
+                </div>
+            </div>
+        </section>
+
+        <section class="banner-block">
+            <div class="flex-block">
+                <div class="banner-block-content">
+                    <h2 class="banner-item-content">Адаптивная вёрстка под все устройства и браузеры от 1000 р всего за 4 часа.*</h2>
+                    <p class="description-text">* Срок и стоимость могут отличаться от заявленных и рассчитываются индивидуально, в зависимости от сложности задач</p>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
-        <div>
+    <footer class="flex-block footer">
+        <div class="content-between-position">
+            <ul class="footer-menu list">
+                <li><a href="#" class="link hover-blue">Услуги</a></li>
+                <li><a href="#" class="link hover-blue">Портфолио</a></li>
+                <li><a href="#" class="link hover-blue">Стоимость</a></li>
+            </ul>
             <div>
-                <ul>
-                    <li><a href="#" class="link">Услуги</a></li>
-                    <li><a href="#" class="link">Портфолио</a></li>
-                    <li><a href="#" class="link">Стоимость</a></li>
+                <p>alexan_96-10@mail.ru</p>
+                <a href="tel:+79995553535" class="link phone">+7 (999) 555-35-35</a>
+            </div>
+            <div class="links-block">
+                <button class="button-tranperent button" call-order>Заказать звонок</button>
+                <ul class="link-list list">
+                    <li><a href="https://www.facebook.com" class="link" target="_blank"><img class="messenger-icon" src="./assets/images/facebook.png" alt="this pic"></a></li>
+                    <li><a href="https://vk.com" class="link" target="_blank"><img class="messenger-icon" src="./assets/images/vk.png" alt="this pic"></a></li>
+                    <li><a href="https://web.telegram.org" class="link" target="_blank"><img class="messenger-icon" src="./assets/images/telegram.png" alt="this pic"></a></li>
+                    <li><a href="https://www.youtube.com" class="link" target="_blank"><img class="messenger-icon" src="./assets/images/youtube.png" alt="this pic"></a></li>
+                    <li><a href="https://www.instagram.com/" class="link" target="_blank"><img class="messenger-icon" src="./assets/images/instagram.png" alt="this pic"></a></li>
                 </ul>
-            </div>
-            <div>
-                <span>alexan_96-10@mail.ru</span>
-                <span>+7 (999) 555-35-35</span>
-            </div>
-            <div>
-                <button>Заказать звонок</button>
-                <div>
-                    <span>1</span>
-                    <span>2</span>
-                    <span>3</span>
-                    <span>4</span>
-                    <span>5</span>
-                </div>
             </div>
         </div>
     </footer>
