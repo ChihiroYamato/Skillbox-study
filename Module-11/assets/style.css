@@ -1,3 +1,41 @@
+html {
+    margin: 0;
+    padding: 0;
+}
 body {
+    max-width: 1200px;
+    min-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: 0;
+    cursor: pointer;
     background-color: #f6f7f9;
+    font-size: 20px;
+}
+.header {
+    height: 100px;
+}
+.header-main-block {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-menu {
+    width: 25%;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.header-feedback {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.list {
+    margin: 0;
+    list-style-type: none;
 }
