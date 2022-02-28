@@ -1,0 +1,8 @@
+.portfolio-description-item {
+    width: 370px;
+}
+.portfolio-picture {
+    width: 100%;
+    border: 1px solid #000000;
+    border-radius: 15px;
+}

@@ -1,0 +1,10 @@
+.footer {
+    height: 250px;
+}
+.footer-menu {
+    height: 45%;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}

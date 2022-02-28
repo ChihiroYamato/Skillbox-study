@@ -1,0 +1,19 @@
+.preview-block {
+    margin: 20px 0;
+    height: 500px;
+    display: flex;
+    align-items: center;
+    background-image: url('../images/preview-picture.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right center;
+}
+.preview-description {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.preview-name {
+    font-size: 60px;
+    margin: 0;
+}
