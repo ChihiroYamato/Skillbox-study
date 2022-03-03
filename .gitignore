@@ -3,10 +3,8 @@
 !*/publishing/.gitkeep
 *.code-workspace
 
-*/Storage/
 */reserved/
-
-*/Logs/
+storage/
+logs/
 */text_storage/
-*/logs/
 vendor/
