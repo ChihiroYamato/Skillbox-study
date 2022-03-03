@@ -4,7 +4,9 @@
     "autoload": {
         "psr-4": {
             "App\\Base\\": "core/"
-        }
+        },
+        "classmap": [],
+        "files": []
     },
     "authors": [
         {
@@ -12,5 +14,7 @@
             "email": "alexan9610@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "phpmailer/phpmailer": "^6.6"
+    }
 }
