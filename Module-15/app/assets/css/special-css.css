@@ -1,0 +1,57 @@
+.content-between-position {
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.links-block {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.link-list {
+    padding: 20px 0;
+    width: 200px;
+    display: flex;
+    justify-content: space-between;
+}
+.messenger-icon {
+    width: 20px;
+}
+.phone:hover {
+    font-weight: bold;
+    color: #3f2aff;
+}
+.button {
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 30px;
+    font-size: small;
+}
+.button-tranperent {
+    border: 1px solid #000000;
+    background-color: transparent;
+}
+.button-blue, .on-blue:hover {
+    border: 1px solid #3f2aff;
+    background-color: #3f2aff;
+    color: #ffffff;
+}
+.on-dark:hover {
+    border: 1px solid #281ba5;
+    background-color: #281ba5;
+}
+.link {
+    text-decoration: none;
+    color: #000000;
+}
+.hover-blue:hover {
+    color: #3f2aff;
+}
+.list {
+    margin: 0;
+    list-style-type: none;
+}
+.padding-around {
+    padding: 1ex 1em;
+}
