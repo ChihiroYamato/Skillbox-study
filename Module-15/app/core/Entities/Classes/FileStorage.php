@@ -1,33 +1,67 @@
 <?php
 namespace App\Base\Entities\Classes;
 
-use App\Base\Entities\Classes\Storage,
-    App\Base\Entities\Classes\TelegraphText,
-    App\Base\Entities\Traits\TraitDirectory;
+use App\Base\Entities\Classes\Storage;
+use App\Base\Entities\Classes\TelegraphText;
+use App\Base\Entities\Traits\SimpleExceptionHandler;
+use App\Base\Entities\Traits\TraitDirectory;
+use App\Base\Exceptions\SimpleException;
 
+/**
+ * Класс хранилище для объектов класса TelegraphText
+ *
+ * @var string $directory директория хранилища
+ * @var array $fileStorage Массив всех объектов класса TelegraphText
+ * @var array $eventFlags Массив с флагами прослушки методов
+ * @var ?\Closure $eventCallback callback функция при прослушивании
+ * @var string $logsPath [static] Путь к файлу логов
+ *
+ * @method __construct :void
+ * @method create :string|false object $object
+ * @method read :object|false string $slug
+ * @method update :bool string $slug, object $object, object $newObject
+ * @method delete :bool string $slug
+ * @method list :array|false
+ * @method logMessage :bool string $error
+ * @method lastMessages :array|false int $countErrors
+ * @method attachEvent :bool ?string $method, ?callable $callbackFun
+ * @method detouchEvent :bool ?string $method
+ */
 final class FileStorage extends Storage
 {
-    use TraitDirectory;
+    use TraitDirectory, SimpleExceptionHandler;
 
-    protected string $directory = '';                                 // директория хранилища
-    protected array $fileStorage = [];                                // Массив всех объектов класса TelegraphText
-    protected array $eventFlags = [];                                 // Массив с флагами прослушки методов
-    protected ?\Closure $eventCallback = null;                        // callback функция при прослушивании
+    /** @var string $directory директория хранилища */
+    protected string $directory;
 
-    protected static string $logsPath = '';                           // Путь к файлу логов
+    /** @var array $fileStorage Массив всех объектов класса TelegraphText */
+    protected array $fileStorage;
+
+    /** @var array $eventFlags Массив с флагами прослушки методов */
+    protected array $eventFlags;
+
+    /** @var ?\Closure $eventCallback callback функция при прослушивании */
+    protected ?\Closure $eventCallback = null;
+
+    /** @var string $logsPath [static] Путь к файлу логов */
+    protected static string $logsPath;
 
     /**
-     * Инициализирует хранилище, создает директорию по заданному пути, если директории не существует
-     * @param string $dir задает путь к директории хранилища
+     * Метод инициализирует хранилище, создает директорию по заданному пути, если директории не существует
      */
-    public function __construct(string $dir = 'storage')
+    public function __construct()
     {
         // Инициализация директорий для хранения текстов и логов
-        $this->directory = dirname(__DIR__, 3) . '/' . basename($dir) . '/';
-        self::$logsPath = dirname(__DIR__, 3) . '/logs/file-storage-log';
+        $this->directory = STORAGE_PATH;
+        self::$logsPath = LOGS_PATH . STORAGE_LOGS_NAME;
 
-        $this->makeDirectory($this->directory);
-        $this->makeDirectory(dirname(self::$logsPath));
+        try {
+            // Создание директорий для текстов и логов
+            self::makeDirectory($this->directory);
+            self::makeDirectory(dirname(self::$logsPath));
+        } catch (SimpleException $error) {
+            self::sendEmergencyMail($error);
+        }
 
         // Инициализация флагов
         $methodList = get_class_methods($this);
@@ -37,11 +71,11 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Загружает новый объект класса TelegraphText в хранилище в виде файла
+     * Метод загружает новый объект класса TelegraphText в хранилище в виде файла
      * @param object $object передаваемый объект
      * @return string|false Возвращает путь к файлу, при ошибке возвращает false
      */
-    public function create(object $object): string|false
+    public function create(object $object) : string|false
     {
         if ($this->eventFlags[__FUNCTION__]) {
             ($this->eventCallback)();
@@ -64,11 +98,11 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Считывает объект класса TelegraphText из хранилища
+     * Метод считывает объект класса TelegraphText из хранилища
      * @param string $slug путь к объекту
      * @return object|false возвращает объект, либо false в случае ошибки
      */
-    public function read(string $slug): object|false
+    public function read(string $slug) : object|false
     {
         if ($this->eventFlags[__FUNCTION__]) {
             ($this->eventCallback)();
@@ -84,13 +118,13 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Пересохраняет объект класса TelegraphText по указанному пути
+     * Метод пересохраняет объект класса TelegraphText по указанному пути
      * @param string $slug путь в перезаписываемому объекту
      * @param object $object исходный объект класса TelegraphText для проверки
      * @param object $newObject новый объект класса TelegraphText, который будет записан
      * @return bool возвращает true в случае успешной перезаписи, иначе false
      */
-    public function update(string $slug, object $object, object $newObject): bool
+    public function update(string $slug, object $object, object $newObject) : bool
     {
         if ($this->eventFlags[__FUNCTION__]) {
             ($this->eventCallback)();
@@ -106,11 +140,11 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Удаляет объект класса TelegraphText из хранилища по указанному пути
+     * Метод удаляет объект класса TelegraphText из хранилища по указанному пути
      * @param string $slug путь к удаляемому объекту
      * @return bool возвращает true в случае успешного удаления, иначе false
      */
-    public function delete(string $slug): bool
+    public function delete(string $slug) : bool
     {
         if ($this->eventFlags[__FUNCTION__]) {
             ($this->eventCallback)();
@@ -119,7 +153,7 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Выводит все объекты класса TelegraphText из хранилища в виде массива
+     * Метод выводит все объекты класса TelegraphText из хранилища в виде массива
      * @return array|false возвращает массив, в случае ошибки false
      */
     public function list(): array|false
@@ -146,7 +180,7 @@ final class FileStorage extends Storage
     // Методы интерфейсов
 
     /**
-     * Записывает error в в файл логов
+     * Метод записывает error в в файл логов
      * @param string $error Строка ошибки
      * @return bool Возвращает true в случае успешной записи ошибки в файл, иначе false
      */
@@ -159,11 +193,11 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Возвращает countErrors ошибок из файла логов
+     * Метод возвращает countErrors ошибок из файла логов
      * @param int $countErrors число записей, которые необходимо вернуть
      * @return array|false возвращает массив записей в случае успешного извлечения, иначе false
      */
-    public function lastMessages(int $countErrors = 0): array|false
+    public function lastMessages(int $countErrors = 0) : array|false
     {
         if (false === ($massages = file_get_contents(self::$logsPath))) {
             return false;
@@ -176,7 +210,7 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Присваивает указанному методу флаг прослушки, при последующих вызовах указанного метода
+     * Метод присваивает указанному методу флаг прослушки, при последующих вызовах указанного метода
      * будет выполнена callback функция
      * @param ?string $method Существующий метод класса FileStorage
      * @param ?callable $callbackFun callback функция, которую необходимо выполнять при вызове метода
@@ -193,7 +227,7 @@ final class FileStorage extends Storage
     }
 
     /**
-     * Деактивирует флаг прослушки для метода, установленный в методе attachEvent
+     * Метод деактивирует флаг прослушки для метода, установленный в методе attachEvent
      * @param ?string $method Существующий метод класса FileStorage, который необходимо прекратить прослушивать
      * @return bool возвращает trueв с случае успешной деактивации, иначе false
      */

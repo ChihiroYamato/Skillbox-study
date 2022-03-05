@@ -1,19 +1,49 @@
 <?php
 namespace App\Base\Entities\Classes;
 
+/**
+ * Класс создания и хранения текстов
+ *
+ * @var string $title Заголовок
+ * @var string $text Текст
+ * @var string $author Автор
+ * @var string $published Дата публикации
+ * @var string $slug Уникальное имя объекта
+ * @var FileStorage $storage [static] объект класса FileStorage
+ *
+ * @method __construct :void string $author
+ * @method __set :void string $name, mixed $value
+ * @method __get :mixed string $name
+ * @method storeText :string|false
+ * @method loadText :string|false string $slug
+ * @method editText :void ?string $text, ?string $title
+ * @method changeSlug :void string $newSlug
+ * @method getSlug :string
+ * @method getAllField :array
+ */
 final class TelegraphText
 {
-    private string $title = '';                                         // Заголовок
-    private string $text = '';                                          // Текст
-    private string $author = '';                                        // Автор
-    private string $published = '';                                     // Дата публикации
-    private string $slug = '';                                          // Уникальное имя объекта
+    /** @var string $title Заголовок */
+    private string $title;
 
-    protected static FileStorage $storage;                                 // объект класса FileStorage
+    /** @var string $text Текст */
+    private string $text;
+
+    /** @var string $author Автор */
+    private string $author;
+
+    /** @var string $published Дата публикации */
+    private string $published;
+
+    /** @var string $slug Уникальное имя объекта */
+    private string $slug;
+
+    /** @var FileStorage $storage [static] объект класса FileStorage */
+    protected static FileStorage $storage;
 
 
     /**
-     * Инициализирует поля $author $published $slug при создании объекта
+     * Метод инициализирует поля $author $published $slug при создании объекта
      * @param string $author принимаемый параметр.
      * если не задан, инициализация всех перечисленных полей не производится.
      */
@@ -29,6 +59,11 @@ final class TelegraphText
         }
     }
 
+    /**
+     * Метод устанавливает значения свойствам класса
+     * @param string $name имя свойства
+     * @param mixed $value значение свойства
+     */
     public function __set(string $name, mixed $value)
     {
         match ($name) {
@@ -40,6 +75,10 @@ final class TelegraphText
         };
     }
 
+    /**
+     * Метод возвращает значение свойства класса
+     * @param string $name имя свойства
+     */
     public function __get(string $name) : mixed
     {
         return match ($name) {
@@ -52,7 +91,7 @@ final class TelegraphText
     }
 
     /**
-     * Записывает данные публикации в отдельный файл с модифицированным названием $slug
+     * Метод записывает данные публикации в отдельный файл с модифицированным названием $slug
      * @return string|false Возвращает модифицированное поле $slug при успешном выполнении, false при ошибке
      */
     private function storeText() : string|false
@@ -61,7 +100,7 @@ final class TelegraphText
     }
 
     /**
-     * Записывает в объект данные публикации из файла с названием $slug
+     * Метод записывает в объект данные публикации из файла с названием $slug
      * @param string $slug принимаемый параметр названия файла, из которого произодится запись
      * @return string|false при успешном выполнении метода возвращает поле $text, иначе ыозвращает false
      */
@@ -105,6 +144,7 @@ final class TelegraphText
 
     /**
      * Метод возвращает поле $slug
+     * @return string поле $slug
      */
     public function getSlug() : string
     {
@@ -113,6 +153,7 @@ final class TelegraphText
 
     /**
      * Метод возвращает поля класса в виде массива
+     * @return array поля класса в виде массива
      */
     public function getAllField() : array
     {

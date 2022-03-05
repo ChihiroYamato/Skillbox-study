@@ -2,12 +2,21 @@
 
 namespace App\Base\Entities\Traits;
 
+use App\Base\Exceptions\SimpleException;
+
 trait TraitDirectory
 {
-    protected function makeDirectory(string $directory)
+    /**
+     * Создает директорию, если ее не существут
+     * @param string $directory путь к директории
+     * @throw SimpleException
+     */
+    protected static function makeDirectory(string $directory)
     {
         if (!is_dir($directory)) {
-            mkdir($directory);
+            if(! mkdir($directory)) {
+                throw new SimpleException("Ошибка создания директории $directory");
+            }
         }
     }
 }
