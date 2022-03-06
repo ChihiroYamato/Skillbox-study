@@ -21,7 +21,7 @@
             </ul>
             <div class="header-feedback">
                 <a href="tel:+79999999999" class="link phone">+7 (999) 999-99-99</a>
-                <button class="button-tranperent button on-blue">Test</button>
+                <button class="button-tranperent button on-blue">Submit</button>
             </div>
         </div>
     </header>

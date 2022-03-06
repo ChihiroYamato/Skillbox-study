@@ -13,7 +13,7 @@
                 <a href="tel:+79999999999" class="link phone">+7 (999) 999-99-99</a>
             </div>
             <div class="links-block">
-                <button class="button-tranperent button on-blue">Test</button>
+                <button class="button-tranperent button on-blue">Submit</button>
                 <ul class="link-list list">
                     <li><a href="https://www.facebook.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/facebook.png" alt="this pic"></a></li>
                     <li><a href="https://vk.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/vk.png" alt="this pic"></a></li>
@@ -24,6 +24,9 @@
             </div>
         </div>
     </footer>
+
+    <script src="<?=PROJECT_PATH?>/app/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="<?=PROJECT_PATH?>/app/assets/js/scripts.js"></script>
 
 </body>
 </html>
