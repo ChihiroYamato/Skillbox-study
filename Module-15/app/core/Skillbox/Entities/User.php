@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Base\Entities\Classes;
+namespace App\Base\Skillbox\Entities;
 
-use App\Base\Interfaces\EventListenerInterface;
+use App\Base\Skillbox\Interfaces\EventListenerInterface;
 
 abstract class User implements EventListenerInterface
 {

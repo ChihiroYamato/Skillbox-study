@@ -1,5 +1,6 @@
 <?php
-namespace App\Base\Entities\Classes;
+
+namespace App\Base\Skillbox\Entities;
 
 /**
  * Класс создания и хранения текстов

@@ -1,10 +1,9 @@
 <?php
-namespace App\Base\Entities\Classes;
 
-use App\Base\Entities\Classes\Storage;
-use App\Base\Entities\Classes\TelegraphText;
-use App\Base\Entities\Traits\SimpleExceptionHandler;
-use App\Base\Entities\Traits\TraitDirectory;
+namespace App\Base\Skillbox\Entities;
+
+use App\Base\Helpers\Traits\SimpleExceptionHandler;
+use App\Base\Helpers\Traits\TraitDirectory;
 use App\Base\Exceptions\SimpleException;
 
 /**
@@ -16,7 +15,7 @@ use App\Base\Exceptions\SimpleException;
  * @var ?\Closure $eventCallback callback функция при прослушивании
  * @var string $logsPath [static] Путь к файлу логов
  *
- * @method __construct :void
+ * @method __construct :void string $dir
  * @method create :string|false object $object
  * @method read :object|false string $slug
  * @method update :bool string $slug, object $object, object $newObject
@@ -48,11 +47,12 @@ final class FileStorage extends Storage
 
     /**
      * Метод инициализирует хранилище, создает директорию по заданному пути, если директории не существует
+     * @param string $dir [optional] директория хранилища
      */
-    public function __construct()
+    public function __construct(string $dir = STORAGE_DIR)
     {
         // Инициализация директорий для хранения текстов и логов
-        $this->directory = STORAGE_PATH;
+        $this->directory = STORAGE_BASE_PATH . trim($dir, '\\/') . '/';
         self::$logsPath = LOGS_PATH . STORAGE_LOGS_NAME;
 
         try {

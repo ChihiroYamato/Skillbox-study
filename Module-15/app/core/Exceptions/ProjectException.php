@@ -2,8 +2,8 @@
 
 namespace App\Base\Exceptions;
 
-use App\Base\Entities\Traits\TraitDirectory;
-use App\Base\Entities\Traits\SimpleExceptionHandler;
+use App\Base\Helpers\Traits\TraitDirectory;
+use App\Base\Helpers\Traits\SimpleExceptionHandler;
 use Exception;
 use DateTime;
 use DOMDocument;

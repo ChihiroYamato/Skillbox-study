@@ -1,8 +1,9 @@
 <?php
-namespace App\Base\Entities\Classes;
 
-use App\Base\Interfaces\LoggerInterface,
-    App\Base\Interfaces\EventListenerInterface;
+namespace App\Base\Skillbox\Entities;
+
+use App\Base\Skillbox\Interfaces\LoggerInterface;
+use App\Base\Skillbox\Interfaces\EventListenerInterface;
 
 abstract class Storage implements LoggerInterface, EventListenerInterface
 {

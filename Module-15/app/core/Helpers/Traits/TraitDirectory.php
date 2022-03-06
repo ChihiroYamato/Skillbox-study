@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Base\Entities\Traits;
+namespace App\Base\Helpers\Traits;
 
 use App\Base\Exceptions\SimpleException;
 

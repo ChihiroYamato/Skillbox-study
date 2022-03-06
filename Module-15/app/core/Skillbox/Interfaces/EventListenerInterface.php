@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Base\Interfaces;
+namespace App\Base\Skillbox\Interfaces;
 
 interface EventListenerInterface
 {

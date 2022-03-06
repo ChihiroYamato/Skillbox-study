@@ -1,8 +1,6 @@
 <?php
 
-namespace App\Base\Entities\Classes;
-
-use App\Base\Entities\Classes\Storage;
+namespace App\Base\Skillbox\Entities;
 
 abstract class View
 {
