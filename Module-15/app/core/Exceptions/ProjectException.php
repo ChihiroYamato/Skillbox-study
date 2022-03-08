@@ -2,6 +2,7 @@
 
 namespace App\Base\Exceptions;
 
+use App\Base\Exceptions\SimpleException;
 use App\Base\Helpers\Traits\TraitDirectory;
 use App\Base\Helpers\Traits\SimpleExceptionHandler;
 use Exception;
@@ -15,14 +16,12 @@ use SimpleXMLElement;
  *
  * @var ?string $className [static] имя текущего класса Exception
  * @var DateTime $curentTime время возникновения Exception
- * @var string $logsPath путь к файлу логов
+ * @var string $logs полный путь к логам исключений
  * @var string XML_ROOT_ELEMENT [const] имя корневого XML элемента
- * @var array HTML_EXCEPTION_CLASS [const] массив css классов для html вывода ошибок
  *
  * @method __construct :void string $message, int $code, ?\Throwable $previous, string $logsName
  * @method getClassName :string
- * @method toLogsXML :bool
- * @method toStringHTML :string
+ * @method toLogsXML :void
  * @method initialLogsXML :ProjectException
  * @method formatLogsXML :ProjectException
  * @method addExceptionToXML :ProjectException
@@ -34,19 +33,14 @@ abstract class ProjectException extends Exception
     /** @var DateTime $curentTime время возникновения Exception */
     protected DateTime $curentTime;
 
-    /** @var string $logsPath путь к файлу логов */
-    protected string $logsPath;
+    /** @var string $logs полный путь к логам исключений */
+    protected string $logs;
 
     /** @var ?string $className [static] имя текущего класса Exception */
     protected static ?string $className = null;
 
     /** @var string XML_ROOT_ELEMENT [const] имя корневого XML элемента */
     protected const XML_ROOT_ELEMENT = 'Exceptions';
-
-    /** @var array HTML_EXCEPTION_CLASS [const] массив css классов для html вывода ошибок */
-    protected const HTML_EXCEPTION_CLASS = [
-        'ALERT' => 'alert alert-danger padding-around',
-    ];
 
     /**
      * Метод инициализирует объект дочернего класса от ProjectException
@@ -59,7 +53,7 @@ abstract class ProjectException extends Exception
     {
         parent::__construct($message, $code, $previous);
         $this->curentTime = new DateTime();
-        $this->logsPath = LOGS_PATH . $logsName;
+        $this->logs = LOGS_PATH . $logsName;
         if (self::$className === null) {
             self::$className = preg_match('/([\w]*Exception)$/', get_class($this), $matches) ? $matches[1] : 'Undefined';
         }
@@ -76,40 +70,14 @@ abstract class ProjectException extends Exception
 
     /**
      * Метод записывает Exception в XML файл по указанному пути
-     * @param string $logsName [optional] имя файла для логов
-     * @return bool возвращает результат записи ошибки в XML файл
      */
-    public function toLogsXML() : bool
+    public function toLogsXML() : void
     {
         try {
             $this->initialLogsXML()->addExceptionToXML()->formatLogsXML();
         } catch (SimpleException $error) {
-            self::sendEmergencyMail($error);
-            return false;
+            self::getFatalError($error, __CLASS__);
         }
-
-        return true;
-    }
-
-    /**
-     * Метод возвращает информацию об Exception в формате HTML
-     * @return string сообщение об ошибке, отформатированное для вывода в HTML
-     */
-    public function toStringHTML() : string
-    {
-        $html = new DOMDocument();
-
-        $exception = $html->createElement('div');
-
-        $class = $html->createAttribute('class');
-        $class->value = self::HTML_EXCEPTION_CLASS['ALERT'];
-
-        $exception->appendChild($class);
-        $exception->appendChild($html->createElement('span', $this->message));
-
-        $result = $html->saveHTML($exception);
-
-        return $result !== false ? $result : '';
     }
 
     /**
@@ -120,14 +88,14 @@ abstract class ProjectException extends Exception
      */
     protected function initialLogsXML() : ProjectException
     {
-        if (! file_exists($this->logsPath)) {
-            self::makeDirectory(dirname($this->logsPath));
+        if (! file_exists($this->logs)) {
+            self::makeDirectory(dirname($this->logs));
 
             $xml = new DOMDocument('1.0', 'utf-8');
             $xml->appendChild($xml->createElement(self::XML_ROOT_ELEMENT));
 
-            if (! $xml->save($this->logsPath)) {
-                throw new SimpleException("Ошибка сохранения xml в {$this->logsPath}");
+            if (! $xml->save($this->logs)) {
+                throw new SimpleException("Ошибка сохранения xml в {$this->logs}");
             }
         }
 
@@ -135,7 +103,7 @@ abstract class ProjectException extends Exception
     }
 
     /**
-     * Метод форматирует указанный XML файл
+     * Метод форматирует указанный XML файл в человеко-читаемый вид
      * @return ProjectException возвращает экземпляр текущего исключения
      * @throw SimpleException
      */
@@ -143,11 +111,11 @@ abstract class ProjectException extends Exception
     {
         $xml = new DOMDocument();
         $xml->formatOutput = true;
-        if (! $xml->load($this->logsPath, LIBXML_NOBLANKS)) {
-            throw new SimpleException("Ошибка загрузки xml из {$this->logsPath}");
+        if (! $xml->load($this->logs, LIBXML_NOBLANKS)) {
+            throw new SimpleException("Ошибка загрузки xml из {$this->logs}");
         }
-        if (! $xml->save($this->logsPath)) {
-            throw new SimpleException("Ошибка сохранения xml в {$this->logsPath}");
+        if (! $xml->save($this->logs)) {
+            throw new SimpleException("Ошибка сохранения xml в {$this->logs}");
         }
 
         return $this;
@@ -160,8 +128,8 @@ abstract class ProjectException extends Exception
      */
     protected function addExceptionToXML() : ProjectException
     {
-        if (($xmlFile = file_get_contents($this->logsPath)) === false) {
-            throw new SimpleException("Ошибка загрузки xml из {$this->logsPath}");
+        if (($xmlFile = file_get_contents($this->logs)) === false) {
+            throw new SimpleException("Ошибка загрузки xml из {$this->logs}");
         }
 
         $xml = new SimpleXMLElement($xmlFile);
@@ -180,8 +148,8 @@ abstract class ProjectException extends Exception
         $exception->addChild('File', $this->file);
         $exception->addChild('Line', $this->line);
 
-        if ($xml->asXML($this->logsPath) === false) {
-            throw new SimpleException("Ошибка сохранения xml в {$this->logsPath}");
+        if ($xml->asXML($this->logs) === false) {
+            throw new SimpleException("Ошибка сохранения xml в {$this->logs}");
         }
 
         return $this;
