@@ -4,6 +4,11 @@ namespace App\Base\Helpers\Traits;
 
 use App\Base\Exceptions\SimpleException;
 
+/**
+ * Трейт для работы с директориями
+ *
+ * @method  makeDirectory :void string $directory
+ */
 trait TraitDirectory
 {
     /**
@@ -11,7 +16,7 @@ trait TraitDirectory
      * @param string $directory путь к директории
      * @throw SimpleException
      */
-    protected static function makeDirectory(string $directory)
+    final protected static function makeDirectory(string $directory) : void
     {
         if (!is_dir($directory)) {
             if(! mkdir($directory)) {
