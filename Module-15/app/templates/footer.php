@@ -15,18 +15,18 @@
             <div class="links-block">
                 <button class="button-tranperent button on-blue">Submit</button>
                 <ul class="link-list list">
-                    <li><a href="https://www.facebook.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/facebook.png" alt="this pic"></a></li>
-                    <li><a href="https://vk.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/vk.png" alt="this pic"></a></li>
-                    <li><a href="https://web.telegram.org" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/telegram.png" alt="this pic"></a></li>
-                    <li><a href="https://www.youtube.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/youtube.png" alt="this pic"></a></li>
-                    <li><a href="https://www.instagram.com/" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_PATH?>/app/assets/images/instagram.png" alt="this pic"></a></li>
+                    <li><a href="https://www.facebook.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_SERVER_PATH?>/app/assets/images/facebook.png" alt="this pic"></a></li>
+                    <li><a href="https://vk.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_SERVER_PATH?>/app/assets/images/vk.png" alt="this pic"></a></li>
+                    <li><a href="https://web.telegram.org" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_SERVER_PATH?>/app/assets/images/telegram.png" alt="this pic"></a></li>
+                    <li><a href="https://www.youtube.com" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_SERVER_PATH?>/app/assets/images/youtube.png" alt="this pic"></a></li>
+                    <li><a href="https://www.instagram.com/" class="link" target="_blank"><img class="messenger-icon" src="<?=PROJECT_SERVER_PATH?>/app/assets/images/instagram.png" alt="this pic"></a></li>
                 </ul>
             </div>
         </div>
     </footer>
 
-    <script src="<?=PROJECT_PATH?>/app/assets/js/jquery-3.6.0.min.js"></script>
-    <script src="<?=PROJECT_PATH?>/app/assets/js/scripts.js"></script>
+    <script src="<?=PROJECT_SERVER_PATH?>/app/assets/js/jquery-3.6.0.min.js"></script>
+    <script src="<?=PROJECT_SERVER_PATH?>/app/assets/js/scripts.js"></script>
 
 </body>
 </html>
