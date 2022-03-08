@@ -60,7 +60,7 @@ final class FileStorage extends Storage
             self::makeDirectory($this->directory);
             self::makeDirectory(dirname(self::$logsPath));
         } catch (SimpleException $error) {
-            self::sendEmergencyMail($error);
+            self::getFatalError($error, __CLASS__);
         }
 
         // Инициализация флагов
@@ -166,7 +166,9 @@ final class FileStorage extends Storage
             return false;
         }
         $arrayFiles = scandir($this->directory, SCANDIR_SORT_NONE);
-        if (in_array('.', $arrayFiles, true)) {$arrayFiles = array_splice($arrayFiles, 2);}
+        if (in_array('.', $arrayFiles, true)) {
+            $arrayFiles = array_splice($arrayFiles, 2);
+        }
 
         foreach ($arrayFiles as $file) {
             $scanObject = unserialize(file_get_contents($this->directory . $file));
