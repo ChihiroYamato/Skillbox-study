@@ -10,25 +10,31 @@ define('SERVER_MAX_FILE_SIZE', 2 * 1024 * 1024);
 /** Старт сессии */
 session_start();
 
+/** Обработка входящей формы */
 if (isset($_FILES['FORM_PHOTO']) && $_FILES['FORM_PHOTO']['size'] > 0) {
     try {
+        /** Проверка сессии на загрузку файлов ранее */
         if (isset($_SESSION['FILES_COUNT']) && $_SESSION['FILES_COUNT'] >= 1) {
             unset($_SESSION['FILES_COUNT']);
             throw new Exception('Превышен допустимый лимит на загрузку файлов');
         }
 
+        /** Проверка кода загрузки файла */
         if ($_FILES['FORM_PHOTO']['error'] !== UPLOAD_ERR_OK) {
             throw new Exception('Ошибка загрузки файла на сервер. Код ошибки: ' . $_FILES['FORM_PHOTO']['error']);
         }
 
+        /** Проверка расширения файла */
         if (! preg_match('/\.(png|jpg)$/', $_FILES['FORM_PHOTO']['name'])) {
             throw new Exception('Некорректное расширение файла. Допустимы расширения: JPG и PNG');
         }
 
+        /** Проверка размера файла */
         if ($_FILES['FORM_PHOTO']['size'] > SERVER_MAX_FILE_SIZE) {
-            throw new Exception('Превышен допустимый вес файла. Допустимое значение: ' . (SERVER_MAX_FILE_SIZE / (1024 * 1024)) . ' Мбайт');
+            throw new Exception('Превышен допустимый размер файла. Допустимое значение: ' . (SERVER_MAX_FILE_SIZE / (1024 * 1024)) . ' Мбайт');
         }
 
+        /** Обработка и сохранение файла */
         $photoName = basename($_FILES['FORM_PHOTO']['name']);
         if (move_uploaded_file($_FILES['FORM_PHOTO']['tmp_name'], PROJECT_LOCAL_PATH . '/images/' . $photoName) === true) {
             if (isset($_SESSION['FILES_COUNT'])) {
@@ -41,8 +47,10 @@ if (isset($_FILES['FORM_PHOTO']) && $_FILES['FORM_PHOTO']['size'] > 0) {
             header('Location: http://' . $_SERVER['HTTP_HOST'] . PROJECT_SERVER_PATH . '/images/' . $photoName);
             exit;
         }
+        /** Нахождение на этой строке свидетельствует провалу сохранения файла - выбрасывание исключения */
         throw new Exception('Ошибка сохранения файла');
     } catch (Exception $error) {
+        /** Сохранение сообщения ошибки в сессию и редирект для очистки формы */
         $_SESSION['FORM_ERROR'] = $error->getMessage();
         header_remove();
         header('Location: ' . $_SERVER['HTTP_REFERER']);
