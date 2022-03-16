@@ -1,0 +1,9 @@
+.form-medium {
+    width: 500px;
+}
+.form-label {
+    margin: 0 1ex;
+}
+.textarea-height-important {
+    height: 7em !important;
+}
