@@ -21,6 +21,7 @@ if (isset($_SESSION['URL_PARSE'])) {
             throw new Exception('Некорректное поле URL');
         }
 
+        /** Подключение к url из POST */
         $curl = curl_init($_SESSION['URL_PARSE']);
 
         curl_setopt($curl, CURLOPT_USERAGENT, $_SERVER['HTTP_USER_AGENT']);
@@ -31,6 +32,7 @@ if (isset($_SESSION['URL_PARSE'])) {
             throw new Exception('Ошибка запроса на указанный URL');
         }
 
+        /** Подключение к url REST API */
         $request = json_encode(['raw_text' => $response]);
 
         $curlREST = curl_init('http://' . $_SERVER['HTTP_HOST'] . PROJECT_SERVER_PATH . '/HtmlProcessor.php');
@@ -47,11 +49,9 @@ if (isset($_SESSION['URL_PARSE'])) {
             throw new Exception("Код ответа $code - " . json_decode($responseREST, true)['error']);
         }
 
-        echo json_decode($responseREST, true)['formatted_text'];
-        unset($_SESSION['URL_PARSE']);
-        exit;
+        $message = json_decode($responseREST, true)['formatted_text'];
     } catch (Exception $error) {
-        $message = $error->getMessage();
+        $errorMessage = $error->getMessage();
     }
 
     unset($_SESSION['URL_PARSE']);
@@ -61,22 +61,28 @@ if (isset($_SESSION['URL_PARSE'])) {
 require_once PROJECT_LOCAL_PATH . '/app/templates/header.php';
 ?>
 
-<?php if (isset($message)) :?>
+<?php if (isset($errorMessage)) :?>
     <div class="alert alert-danger padding-around">
-        <b><?=$message?></b>
+        <b><?=$errorMessage?></b>
     </div>
 <?php endif; ?>
 
 <section class="flex-block">
-    <form class="row g-3 needs-validation form-medium" method="POST" novalidate>
-        <div class="form-floating">
-            <input type="text" name="URL_PARSE" class="form-control" id="floatingUrl" placeholder="http" pattern="(http|https)://\S{3,}\.\S{2,}" required>
-            <label class="form-label" for="floatingUrl">Введите URL для парсинга</label>
+    <?php if (isset($message)) :?>
+        <div class="parse-block">
+            <?=$message?>
         </div>
-        <div class="col-12 end-position">
-            <button class="button-blue button on-dark" type="submit">Submit form</button>
-        </div>
-    </form>
+    <?php else :?>
+        <form class="row g-3 needs-validation form-medium" method="POST" novalidate>
+            <div class="form-floating">
+                <input type="text" name="URL_PARSE" class="form-control" id="floatingUrl" placeholder="http" pattern="(http|https)://\S{3,}\.\S{2,}" required>
+                <label class="form-label" for="floatingUrl">Введите URL для парсинга</label>
+            </div>
+            <div class="col-12 end-position">
+                <button class="button-blue button on-dark" type="submit">Submit form</button>
+            </div>
+        </form>
+    <?php endif;?>
 </section>
 
 <?php require_once PROJECT_LOCAL_PATH . '/app/templates/footer.php';?>
