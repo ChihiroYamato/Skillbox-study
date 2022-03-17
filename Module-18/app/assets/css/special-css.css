@@ -59,3 +59,10 @@
     display: flex;
     justify-content: flex-end;
 }
+
+.parse-block {
+    background-color: #c3cee5;
+    padding: 1em 2ex;
+    border-radius: 1em;
+    border: 0.3ex solid #3f2aff;
+}
