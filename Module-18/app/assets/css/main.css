@@ -1,0 +1,18 @@
+html {
+    margin: 0;
+    padding: 0;
+}
+body {
+    margin: 0;
+    padding: 0;
+    cursor: default;
+    background-color: #f6f7f9;
+    font-family: 'Roboto', sans-serif;
+}
+
+.flex-block {
+    max-width: 1200px;
+    min-width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+}
