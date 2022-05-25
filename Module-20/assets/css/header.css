@@ -1,0 +1,16 @@
+.header {
+    height: 100px;
+    font-size:larger;
+}
+.header-menu {
+    width: 25%;
+    padding: 0;
+    display: flex;
+    justify-content: space-between;
+}
+.header-feedback {
+    width: 30%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
